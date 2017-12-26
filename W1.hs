@@ -107,7 +107,9 @@ ilog2 n = 1 + ilog2 (div n 2)
 -- Hint! pattern matching is your friend.
 
 binomial :: Integer -> Integer -> Integer
-binomial = undefined
+binomial n 0 = 1
+binomial 0 k = 0
+binomial n k = binomial (n-1) k + binomial (n-1) (k-1)
 
 -- Ex 12: The tribonacci numbers are defined by the equations
 --
