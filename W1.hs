@@ -94,7 +94,8 @@ power n k = n * power n (k - 1)
 -- division.
 
 ilog2 :: Integer -> Integer
-ilog2 = undefined
+ilog2 1 = 0
+ilog2 n = 1 + ilog2 (div n 2)
 
 -- Ex 11: compute binomial coefficients using recursion. Binomial
 -- coefficients are defined by the following equations:
