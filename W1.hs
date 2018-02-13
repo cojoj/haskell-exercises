@@ -122,13 +122,17 @@ binomial n k = binomial (n-1) k + binomial (n-1) (k-1)
 -- computes T(n). You'll probably want to define a helper function.
 
 tribonacci :: Integer -> Integer
-tribonacci = undefined
+tribonacci 1 = 1
+tribonacci 2 = 1
+tribonacci 3 = 2
+tribonacci n = tribonacci (n-1) + tribonacci (n-2) + tribonacci (n-3)
 
 -- Ex 13: implement the euclidean algorithm for finding the greatest
 -- common divisor: http://en.wikipedia.org/wiki/Euclidean_algorithm
 
 myGcd :: Integer -> Integer -> Integer
-myGcd = undefined
+myGcd a 0 = a
+myGcd a b = myGcd b $ a `mod` b 
 
 -- Ex 14: The Haskell Prelude (standard library) defines the type
 -- Ordering with values LT, GT and EQ. You try out Ordering by
@@ -147,7 +151,9 @@ myGcd = undefined
 -- 2. Within even and odd numbers the ordering is normal
 
 funnyCompare :: Int -> Int -> Ordering
-funnyCompare = undefined
+funnyCompare x y    | odd x && even y   = GT
+                    | even x && odd y   = LT
+                    | otherwise         = compare x y 
 
 -- Ex 15: Implement the function funnyMin that returns the minimum of
 -- its two arguments, according to the ordering implemented by
@@ -158,7 +164,9 @@ funnyCompare = undefined
 -- expression or define a helper function.
 
 funnyMin :: Int -> Int -> Int
-funnyMin = undefined
+funnyMin x y  = case funnyCompare x y of
+                    GT -> y
+                    _  -> x
 
 -- Ex 16: implement the recursive function pyramid that returns
 -- strings like this:
