@@ -56,7 +56,11 @@ takeFinal n xs = drop (length xs - n) xs
 -- The [a] in the type signature means "a list of any type"
 
 remove :: Int -> [a] -> [a]
-remove i xs = undefined
+remove _ [] = []
+remove i xs = start ++ end
+    where 
+        start   = take i xs
+        end     = drop (i+1) xs
 
 -- Ex 5: substring i n s should return the length n substring of s
 -- starting at index i.
@@ -64,7 +68,7 @@ remove i xs = undefined
 -- Remember that strings are lists!
 
 substring :: Int -> Int -> String -> String
-substring i n s = undefined
+substring i n s = take n $ drop i s
 
 -- Ex 6: implement the function mymax that takes as argument a
 -- measuring function (of type a -> Int) and two values (of type a).
@@ -80,7 +84,9 @@ substring i n s = undefined
 --  mymax head   [1,2,3] [4,5]  ==>  [4,5]
 
 mymax :: (a -> Int) -> a -> a -> a
-mymax measure a b = undefined
+mymax measure a b = case compare (measure a) (measure b) of 
+                    GT -> a
+                    _  -> b
 
 -- Ex 7: countSorted receives a list of strings and returns a count of
 -- how many of the strings are in alphabetical order (i.e. how many of
