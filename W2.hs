@@ -95,7 +95,7 @@ mymax measure a b = case compare (measure a) (measure b) of
 -- Remember the functions length, filter and sort
 
 countSorted :: [String] -> Int
-countSorted ss = undefined
+countSorted ss = length $ filter (\x -> x == sort x) ss
 
 -- Ex 8: Implement a function funny, that
 --  - takes in a list of strings
@@ -110,7 +110,8 @@ countSorted ss = undefined
 --  - intercalate               from the module Data.List
 
 funny :: [String] -> String
-funny strings = undefined
+funny strings = map toUpper $ intercalate " " $ sorted strings
+    where sorted xs = filter (\x -> length x > 5) xs
 
 -- Ex 9: implement quicksort. Quicksort is a recursive sorting
 -- algorithm that works like this.
