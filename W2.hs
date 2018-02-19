@@ -127,7 +127,11 @@ funny strings = map toUpper $ intercalate " " $ sorted strings
 -- PS. yes if you want to nit-pick this isn't really quicksort :)
 
 quicksort :: [Int] -> [Int]
-quicksort xs = undefined
+quicksort [] = []
+quicksort (x:xs) = quicksort smaller ++ [x] ++ quicksort bigger
+    where 
+        smaller = filter (<  x) xs
+        bigger  = filter (>= x) xs
 
 -- Ex 10: powers k max should return all the powers of k that are less
 -- than or equal to max. For example:
@@ -141,7 +145,7 @@ quicksort xs = undefined
 --   * the function takeWhile
 
 powers :: Int -> Int -> [Int]
-powers n max = undefined
+powers n max = takeWhile (<= max) [ x ^ y | x <- [n..], y <- [0..] ]
 
 -- Ex 11: implement a search function that takes an updating function,
 -- a checking function and an initial value. Search should repeatedly
@@ -162,20 +166,21 @@ powers n max = undefined
 --     ==> Avvt
 
 search :: (a->a) -> (a->Bool) -> a -> a
-search update check initial = undefined
+search update check initial = until check update initial
 
 -- Ex 12: given numbers n and k, build the list of numbers n,n+1..k.
 -- Use recursion and the : operator to build the list.
 
 fromTo :: Int -> Int -> [Int]
-fromTo n k = undefined
+fromTo n k  | n > k    = []
+            | otherwise = n : fromTo (n + 1) k
 
 -- Ex 13: given i, build the list of sums [1, 1+2, 1+2+3, .., 1+2+..+i]
 --
 -- Ps. you'll probably need a recursive helper function
 
 sums :: Int -> [Int]
-sums i = undefined
+sums i = map (\x -> sum [1..x]) [1..i]
 
 -- Ex 14: using list pattern matching and recursion, define a function
 -- mylast that returns the last value of the given list. For an empty
@@ -186,14 +191,17 @@ sums i = undefined
 --   mylast 0 [1,2,3] ==> 3
 
 mylast :: a -> [a] -> a
-mylast def xs = undefined
+mylast def [] = def
+mylast _ xs = last xs
 
 -- Ex 15: define a function that checks if the given list is in
 -- increasing order. Use recursion and pattern matching. Don't use any
 -- library list functions.
 
 sorted :: [Int] -> Bool
-sorted xs = undefined
+sorted [_] = True
+sorted (x:y:xs) | x <= y    = sorted (y:xs)
+                | otherwise = False
 
 -- Ex 16: compute the partial sums of the given list like this:
 --
