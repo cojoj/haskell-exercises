@@ -210,7 +210,7 @@ sorted (x:y:xs) | x <= y    = sorted (y:xs)
 --   sumsOf []       ==>  []
 
 sumsOf :: [Int] -> [Int]
-sumsOf xs = undefined
+sumsOf xs = tail $ map (sum) $ inits xs
 
 -- Ex 17: define the function mymaximum that takes a list and a
 -- comparing function of type a -> a -> Ordering and returns the
@@ -229,7 +229,8 @@ sumsOf xs = undefined
 --     ==> 0
 
 mymaximum :: (a -> a -> Ordering) -> a -> [a] -> a
-mymaximum cmp def xs = undefined
+mymaximum _ def [] = def
+mymaximum cmp _ xs = maximumBy cmp xs
 
 -- Ex 18: define a version of map that takes a two-argument function
 -- and two lists. Example:
@@ -241,7 +242,8 @@ mymaximum cmp def xs = undefined
 -- name.
 
 map2 :: (a -> b -> c) -> [a] -> [b] -> [c]
-map2 f as bs = undefined
+map2 f (a:as) (b:bs) = f a b : map2 f as bs
+map2 f _ _ = []
 
 -- Ex 19: in this exercise you get to implement an interpreter for a
 -- simple language. The language controls two counters, A and B, and
@@ -274,7 +276,15 @@ map2 f as bs = undefined
 -- your interpreter correctly but weirdly :(
 
 interpreter :: [String] -> [String]
-interpreter commands = undefined
+interpreter commands = go 0 0 commands
+  where go a b ("incA":commands) = go (a+1) b commands
+        go a b ("decA":commands) = go (a-1) b commands
+        go a b ("incB":commands) = go a (b+1) commands
+        go a b ("decB":commands) = go a (b-1) commands
+        go a b ("printA":commands) = show a : go a b commands
+        go a b ("printB":commands) = show b : go a b commands
+        go a b []                  = []
+        go a b (_:commands)        = "BAD" : go a b commands
 
 -- Ex 20: write a function that finds the n first squares (numbers of
 -- the form x*x) that start and end with the same digit.
@@ -284,4 +294,16 @@ interpreter commands = undefined
 -- Remember, the function show transforms a number to a string.
 
 squares :: Int -> [Integer]
-squares n = undefined
+squares n = take n . map fromDigits . filter sameProfixAndPostfix $ map digits squaredList
+
+digits :: Int -> [Integer]
+digits n = [toInteger (digitToInt x) | x <- show n]
+
+squaredList = [x*x | x <- [1..]]
+
+sameProfixAndPostfix :: [Integer] -> Bool
+sameProfixAndPostfix xs = head xs == last xs
+
+fromDigits :: [Integer] -> Integer
+fromDigits = foldl addDigit 0
+   where addDigit num d = 10*num + d
