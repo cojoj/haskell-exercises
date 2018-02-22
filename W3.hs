@@ -49,7 +49,8 @@ eitherDiv x y = Right $ x `div` y
 --   ==> []
 
 mapMaybe :: (a -> Maybe b) -> [a] -> [b]
-mapMaybe f xs = undefined
+mapMaybe f xs = [x | Just x <- applied]
+    where applied = map f xs
 
 -- Ex 4: define the function classify that takes a list of Either a b
 -- values and returns a list of the Left values and a list of the
