@@ -112,27 +112,27 @@ setAge age p = p {age=age}
 -- getB (incB (incA zeros))
 --   ==> 1
 
-data TwoCounters = Undefined
+data TwoCounters = TwoCounters Int Int
 
 -- zeros is a TwoCounters value with both counters initialized to 0
 zeros :: TwoCounters
-zeros = undefined
+zeros = TwoCounters 0 0
 
 -- getA returns the value of the "A" counter
 getA :: TwoCounters -> Int
-getA tc = undefined
+getA (TwoCounters a _) = a
 
 -- getB returns the value of the "B" counter
 getB :: TwoCounters -> Int
-getB tc = undefined
+getB (TwoCounters _ b) = b
 
 -- incA increases the value of the "A" counter by one
 incA :: TwoCounters -> TwoCounters
-incA tc = undefined
+incA tc = TwoCounters (getA tc + 1) (getB tc)
 
 -- incB does likewise for the "B" counter
 incB :: TwoCounters -> TwoCounters
-incB tc = undefined
+incB tc = TwoCounters (getA tc) (getB tc + 1)
 
 -- Ex 7: define a datatype UpDown that represents a counter that can
 -- either be in incresing or decreasing mode. Also implement the
@@ -151,25 +151,28 @@ incB tc = undefined
 -- get (tick (tick (toggle (tick zero))))
 --   ==> -1
 
-data UpDown = UpDownUndefined1 | UpDownUndefined2
+data Mode = Incrementing | Decrementing
+data UpDown = UpDown Mode Int
 
 -- zero is an increasing counter with value 0
 zero :: UpDown
-zero = undefined
+zero = UpDown Incrementing 0
 
 -- get returns the counter value
 get :: UpDown -> Int
-get ud = undefined
+get (UpDown _ c) = c
 
 -- tick increases an increasing counter by one or decreases a
 -- decreasing counter by one
 tick :: UpDown -> UpDown
-tick ud = undefined
+tick (UpDown Incrementing x) = UpDown Incrementing $ x+1
+tick (UpDown Decrementing x) = UpDown Decrementing $ x-1
 
 -- toggle changes an increasing counter into a decreasing counter and
 -- vice versa
 toggle :: UpDown -> UpDown
-toggle ud = undefined
+toggle (UpDown Incrementing x) = UpDown Decrementing x
+toggle (UpDown Decrementing x) = UpDown Incrementing x
 
 -- !!!!!
 -- The next exercises use the binary tree type defined like this:
