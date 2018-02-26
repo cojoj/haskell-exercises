@@ -65,7 +65,10 @@ mapMaybe f xs = [x | Just x <- applied]
 --     ==> ([1,0],[True,False])
 
 classify :: [Either a b] -> ([a],[b])
-classify es = undefined
+classify es = (lefts, rights)
+    where 
+        lefts   = [ x | Left x <- es ]
+        rights  = [ x | Right x <- es ]
 
 -- Ex 5: define a datatype Person, which should contain the age (an
 -- Int) and the name (a String) of a person.
@@ -73,28 +76,29 @@ classify es = undefined
 -- Also define a Person value fred, and the functions getAge, getname,
 -- setAge and setName (see below).
 
-data Person = PersonUndefined
-  deriving Show
+data Person = Person  { name :: String
+                      , age :: Int
+                      } deriving Show
 
 -- fred is a person whose name is Fred and age is 90
 fred :: Person
-fred = undefined
+fred = Person {name="Fred", age=90}
 
 -- getName returns the name of the person
 getName :: Person -> String
-getName p = undefined
+getName = name
 
 -- getAge returns the age of the person
 getAge :: Person -> Int
-getAge p = undefined
+getAge = age
 
 -- setName takes a person and returns a new person with the name changed
 setName :: String -> Person -> Person
-setName name p = undefined
+setName name p = p {name=name}
 
 -- setAge does likewise for age
 setAge :: Int -> Person -> Person
-setAge age p = undefined
+setAge age p = p {age=age}
 
 
 -- Ex 6: define a datatype TwoCounters which contains two Int
